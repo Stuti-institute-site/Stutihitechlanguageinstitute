@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Panel</title>
+</head>
+<body>
+<h2>Student Records</h2>
+
+Search Admission:
+<input id="searchAdm" onkeyup="render()" placeholder="SHLI-123456">
+Search Mobile:
+<input id="searchMob" onkeyup="render()" placeholder="Mobile">
+
+<table border="1" cellpadding="5">
+<thead>
+<tr>
+<th>Admission</th><th>Name</th><th>Mobile</th><th>Course</th><th>Action</th>
+</tr>
+</thead>
+<tbody id="data"></tbody>
+</table>
+
+<script>
+let students = JSON.parse(localStorage.getItem("students") || "[]");
+
+function render(){
+  data.innerHTML = "";
+  students.forEach((s,i)=>{
+    if(s.admission.includes(searchAdm.value) &&
+       s.mobile.includes(searchMob.value)){
+      data.innerHTML += `
+      <tr>
+        <td>${s.admission}</td>
+        <td>${s.name}</td>
+        <td>${s.mobile}</td>
+        <td>${s.course}</td>
+        <td><button onclick="del(${i})">Delete</button></td>
+      </tr>`;
+    }
+  });
+}
+
+function del(i){
+  if(confirm("Delete this record?")){
+    students.splice(i,1);
+    localStorage.setItem("students", JSON.stringify(students));
+    render();
+  }
+}
+
+render();
+</script>
+</body>
+</html>

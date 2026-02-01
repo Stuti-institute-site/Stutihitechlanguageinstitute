@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admission Form</title>
+</head>
+<body>
+<h2>Student Admission Form</h2>
+
+<form onsubmit="generateAdmission(event)">
+  <input type="text" id="name" placeholder="Student Name" required><br><br>
+  <input type="text" id="father" placeholder="Father's Name"><br><br>
+  <input type="date" id="dob"><br><br>
+
+  <select id="gender">
+    <option>Male</option>
+    <option>Female</option>
+  </select><br><br>
+
+  <input type="tel" id="mobile" placeholder="Mobile Number" required><br><br>
+  <input type="email" id="email" placeholder="Email"><br><br>
+
+  <select id="course">
+    <option>Basic</option>
+    <option>Intermediate</option>
+    <option>Advance</option>
+  </select><br><br>
+
+  <textarea id="address" placeholder="Address"></textarea><br><br>
+
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+function generateAdmission(e){
+  e.preventDefault();
+  const adm = "SHLI-" + Math.floor(100000 + Math.random()*900000);
+
+  const student = {
+    admission: adm,
+    name: name.value,
+    father: father.value,
+    dob: dob.value,
+    gender: gender.value,
+    mobile: mobile.value,
+    email: email.value,
+    course: course.value,
+    address: address.value
+  };
+
+  let list = JSON.parse(localStorage.getItem("students") || "[]");
+  list.push(student);
+  localStorage.setItem("students", JSON.stringify(list));
+  localStorage.setItem("admissionNumber", adm);
+
+  window.location.href = "thankyou.html";
+}
+</script>
+</body>
+</html>
