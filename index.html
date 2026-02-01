@@ -1,142 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<title>STUTI HIGHTECH LANGUAGE INSTITUTE</title>
+<title>Stuti Hight Language Institute</title>
 <style>
-body {
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#f4f9ff;
-}
-
-header {
-    background: lightblue;
-    padding:20px;
-    text-align:center;
-}
-
-header h1 { margin:0; color:#003366; }
-header h3 { margin:5px 0 0; color:#004c99; }
-
-nav {
-    background:#0059b3;
-    display:flex;
-    justify-content:center;
-    flex-wrap:wrap;
-}
-
-nav a {
-    color:white;
-    padding:14px 18px;
-    text-decoration:none;
-    font-weight:bold;
-}
-
-nav a:hover {
-    background:#003d80;
-}
-
-.submenu {
-    display:none;
-    background:#e6f2ff;
-    padding:15px;
-    animation: slideDown 0.4s ease;
-}
-
-@keyframes slideDown {
-    from {opacity:0; transform:translateY(-10px);}
-    to {opacity:1; transform:translateY(0);}
-}
-
-.container {
-    max-width:800px;
-    margin:20px auto;
-    background:white;
-    padding:20px;
-    min-height:1000px;
-}
-
-h2 { color:#004c99; }
-
-ul li { margin:8px 0; }
-
-footer {
-    background:#003366;
-    color:white;
-    padding:20px;
-    text-align:center;
-}
+body{font-family:Arial;background:#f2f2f2;margin:0}
+header{background:#4CAF50;color:white;padding:15px;text-align:center}
+nav{background:#333;padding:10px;text-align:center}
+nav a{color:white;margin:10px;text-decoration:none;font-weight:bold}
+section{padding:20px}
+input,button{padding:10px;margin:5px;width:100%}
+.admin, .receipt{display:none;background:#fff;padding:15px;border-radius:5px}
+.box{background:white;padding:15px;border-radius:5px;margin-bottom:15px}
 </style>
-
-<script>
-function showMenu(id){
-    document.querySelectorAll('.submenu').forEach(s => s.style.display='none');
-    document.getElementById(id).style.display='block';
-}
-</script>
 </head>
-
 <body>
 
 <header>
-<h1>STUTI HIGHTECH LANGUAGE INSTITUTE</h1>
-<h3>Varanasi / Kanpur</h3>
+<h1>Stuti High Language Institute</h1>
+<p>Ultra Pro Admission System</p>
 </header>
 
 <nav>
-<a href="#" onclick="showMenu('home')">Home</a>
-<a href="#" onclick="showMenu('admission')">Admission Form</a>
-<a href="#" onclick="showMenu('record')">Student Record</a>
+<a href="#" onclick="showSection('home')">Home</a>
+<a href="#" onclick="showSection('admission')">Admission</a>
+<a href="#" onclick="showSection('admin')">Admin</a>
+<a href="#" onclick="showSection('search')">Search</a>
 </nav>
 
-<div class="container">
+<section id="home" class="box">
+<h2>Welcome</h2>
+<p>Online Admission + Fees + Receipt System</p>
+</section>
 
-<div id="home" class="submenu">
-<h2>Our Services</h2>
-<ul>
-<li>Good and direct conversation with foreigners</li>
-<li>Daily practice with teachers and students</li>
-<li>Every Saturday presentation class with doubt session</li>
-</ul>
-</div>
-
-<div id="admission" class="submenu">
+<section id="admission" class="box" style="display:none">
 <h2>Admission Form</h2>
-<form onsubmit="event.preventDefault(); generateNo();">
-Name:<br><input type="text" required><br><br>
-Mobile:<br><input type="number" required><br><br>
-Course:<br>
-<select>
-<option>Basic</option>
-<option>Intermediate</option>
-<option>Advance</option>
-</select><br><br>
-<button type="submit">Submit</button>
-</form>
-<p id="result"></p>
-</div>
+<input id="name" placeholder="Student Name">
+<input id="course" placeholder="Course">
+<input id="mobile" placeholder="Mobile No">
+<input id="fee" placeholder="Fees Paid">
+<button onclick="submitForm()">Submit Admission</button>
+<div id="thanks"></div>
+</section>
 
-<div id="record" class="submenu">
-<h2>Student Record</h2>
-<p>Search by Admission No or Mobile Number</p>
-<input placeholder="Enter Admission No">
-</div>
+<section id="admin" class="box" style="display:none">
+<h2>Admin Panel</h2>
+<p>Data saved in browser</p>
+</section>
 
-</div>
-
-<footer>
-<h3>Contact Us</h3>
-📞 +91-7307-384-012<br>
-👤 Pramod Srivastav (Director)<br>
-📍 Near Divine Sainik School, Lahartara, Varanasi – 221103
-</footer>
+<section id="search" class="box" style="display:none">
+<h2>Search Student</h2>
+<input id="searchBox" placeholder="Enter Admission No">
+<button onclick="searchStudent()">Search</button>
+<div id="result"></div>
+</section>
 
 <script>
-function generateNo(){
-let num = "SHLI" + Math.floor(100000 + Math.random()*900000);
-document.getElementById("result").innerHTML =
-"✅ Thank you! Your Admission No: <b>"+num+"</b>";
+let data=[];
+
+function showSection(id){
+document.querySelectorAll("section").forEach(s=>s.style.display="none");
+document.getElementById(id).style.display="block";
+}
+
+function submitForm(){
+let name=document.getElementById("name").value;
+let course=document.getElementById("course").value;
+let mobile=document.getElementById("mobile").value;
+let fee=document.getElementById("fee").value;
+let no="SHLI"+Math.floor(Math.random()*100000);
+let obj={no,name,course,mobile,fee};
+data.push(obj);
+localStorage.setItem("admissions",JSON.stringify(data));
+document.getElementById("thanks").innerHTML=
+"<h3>Thank You! Your Admission No: "+no+"</h3>";
+}
+
+function searchStudent(){
+let no=document.getElementById("searchBox").value;
+let list=JSON.parse(localStorage.getItem("admissions"))||[];
+let f=list.find(x=>x.no===no);
+document.getElementById("result").innerHTML=
+f?`Name: ${f.name}<br>Course: ${f.course}<br>Fee: ${f.fee}`:"Not Found";
 }
 </script>
 
